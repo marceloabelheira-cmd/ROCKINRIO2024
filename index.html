@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rock in Rio 2024 — Matriz AxR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#C8292A;--red-light:#fceaea;--red-dark:#8B1A1A;
+  --gold:#D4920A;--gold-light:#fff3cd;--gold-dark:#7a4d00;
+  --blue:#1B5FA0;--blue-light:#e6f0fb;--blue-dark:#0c447c;
+  --green:#2E6B1A;--green-light:#e8f4e0;--green-dark:#1a4a0d;
+  --gray:#3d3d3a;--gray-light:#f5f4f0;--gray-mid:#e8e6e0;
+  --RP-bg:#fff3cd;--RP-text:#7a4d00;--RP-border:#D4920A;
+  --R-bg:#fceaea;--R-text:#8B1A1A;--R-border:#C8292A;
+  --A-bg:#e8f4e0;--A-text:#2E6B1A;--A-border:#3B6D11;
+  --font-display:'Syne',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --shadow:0 2px 12px rgba(0,0,0,.08);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.14);
+  --radius:10px;--radius-lg:14px;
+}
+body{font-family:var(--font-body);background:#f7f6f2;color:var(--gray);min-height:100vh}
+
+/* ── HEADER ── */
+.header{background:#111;color:white;padding:0}
+.header-inner{max-width:1200px;margin:0 auto;padding:28px 32px;display:flex;align-items:center;gap:20px}
+.logo-circle{width:52px;height:52px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-circle svg{width:26px;height:26px;fill:none;stroke:white;stroke-width:2.5;stroke-linecap:round}
+.header-text h1{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
+.header-text p{font-size:12px;color:#aaa;margin-top:4px;font-family:var(--font-body)}
+.header-meta{margin-left:auto;display:flex;gap:20px;flex-shrink:0}
+.meta-pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 16px;text-align:center}
+.meta-pill strong{display:block;font-family:var(--font-display);font-size:20px;font-weight:700;color:white}
+.meta-pill span{font-size:11px;color:#888}
+
+/* ── TABS ── */
+.tabs-bar{background:white;border-bottom:1px solid var(--gray-mid);position:sticky;top:0;z-index:50}
+.tabs-inner{max-width:1200px;margin:0 auto;padding:0 32px;display:flex;gap:0}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:#888;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--font-body);white-space:nowrap}
+.tab-btn:hover{color:var(--gray)}
+.tab-btn.active{color:var(--red);border-bottom-color:var(--red)}
+
+/* ── CONTAINER ── */
+.main{max-width:1200px;margin:0 auto;padding:28px 32px}
+.section{display:none}
+.section.active{display:block}
+
+/* ── METRICS ── */
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.metric-card{background:white;border-radius:var(--radius-lg);padding:16px 18px;border:1px solid var(--gray-mid)}
+.metric-val{font-family:var(--font-display);font-size:28px;font-weight:800;color:#111;line-height:1}
+.metric-lab{font-size:12px;color:#888;margin-top:4px}
+.metric-sub{font-size:11px;color:#bbb;margin-top:2px}
+
+/* ── CARDS GRID ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}.header-meta{display:none}}
+.card{background:white;border-radius:var(--radius-lg);padding:20px;border:1px solid var(--gray-mid)}
+.card-title{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+
+/* ── BAR CHART ── */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-label{font-size:12px;color:#666;width:110px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;height:7px;background:var(--gray-light);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px}
+.bar-val{font-size:12px;color:#999;min-width:52px;text-align:right}
+
+/* ── LEGEND ── */
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#666}
+.legend-badge{width:26px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+
+/* ── MATRIX TABLE ── */
+.table-wrap{overflow-x:auto;border:1px solid var(--gray-mid);border-radius:var(--radius-lg);background:white}
+table{width:100%;border-collapse:collapse;min-width:900px}
+thead th{background:#f5f4f0;padding:8px 6px;font-size:10px;font-weight:600;color:#888;text-align:center;border-bottom:1px solid var(--gray-mid);white-space:nowrap;position:sticky;top:0;z-index:2}
+thead th.th-act{text-align:left;min-width:220px;padding-left:14px}
+tbody td{padding:7px 6px;border-bottom:1px solid #f0efe8;text-align:center;vertical-align:middle;font-size:12px}
+tbody td.td-act{text-align:left;padding-left:14px;padding-right:10px}
+.act-code{font-size:10px;color:#bbb;display:inline-block;width:32px;flex-shrink:0}
+.act-name{font-size:12px;color:#333;line-height:1.3;cursor:pointer;transition:color .15s}
+.act-name:hover{color:var(--red);text-decoration:underline}
+.act-row:hover td{background:#faf9f6}
+.phase-header td{background:#f0ede5 !important;font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.6px;padding:6px 14px}
+.badge{display:inline-flex;align-items:center;justify-content:center;width:24px;height:22px;border-radius:5px;font-size:10px;font-weight:700;cursor:default;transition:transform .1s}
+.badge:hover{transform:scale(1.15)}
+.badge-RP{background:var(--RP-bg);color:var(--RP-text);border:1px solid var(--RP-border)}
+.badge-R{background:var(--R-bg);color:var(--R-text);border:1px solid var(--R-border)}
+.badge-A{background:var(--A-bg);color:var(--A-text);border:1px solid var(--A-border)}
+.badge-empty{color:#ddd;font-size:14px}
+
+/* ── ORG CARDS ── */
+.orgs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.org-card{background:white;border:1px solid var(--gray-mid);border-radius:var(--radius-lg);padding:16px 18px;transition:all .15s;cursor:pointer}
+.org-card:hover{border-color:#ccc;transform:translateY(-1px);box-shadow:var(--shadow)}
+.org-icon{font-size:22px;margin-bottom:10px}
+.org-name{font-family:var(--font-display);font-size:14px;font-weight:700;color:#111;margin-bottom:4px}
+.org-desc{font-size:11px;color:#888;line-height:1.5;margin-bottom:10px}
+.org-stats{display:flex;gap:6px;flex-wrap:wrap}
+.stat-pill{font-size:10px;font-weight:600;padding:3px 9px;border-radius:12px}
+.stat-RP{background:var(--RP-bg);color:var(--RP-text)}
+.stat-R{background:var(--R-bg);color:var(--R-text)}
+.stat-A{background:var(--A-bg);color:var(--A-text)}
+
+/* ── OPS CARDS ── */
+.ops-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.ops-card{background:white;border:1px solid var(--gray-mid);border-radius:var(--radius-lg);padding:18px 20px}
+.ops-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ops-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ops-org{font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px}
+.ops-number{font-family:var(--font-display);font-size:32px;font-weight:800;color:#111;line-height:1}
+.ops-unit{font-size:13px;color:#888;margin-left:4px;font-weight:400;font-family:var(--font-body)}
+.ops-detail{font-size:11px;color:#888;line-height:1.6;margin-top:10px}
+
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:28px;max-width:680px}
+.tl-line{position:absolute;left:9px;top:6px;bottom:6px;width:1.5px;background:var(--gray-mid)}
+.tl-item{position:relative;margin-bottom:20px}
+.tl-dot{position:absolute;left:-23px;top:3px;width:10px;height:10px;border-radius:50%;border:2px solid var(--red);background:white}
+.tl-date{font-size:11px;font-weight:600;color:var(--red);margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px}
+.tl-text{font-size:13px;color:#444;line-height:1.6}
+
+/* ── FILTERS ── */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.filter-lbl{font-size:12px;color:#888;margin-right:4px}
+.filter-btn{padding:5px 14px;font-size:12px;border:1px solid var(--gray-mid);border-radius:20px;cursor:pointer;background:white;color:#666;font-family:var(--font-body);transition:all .15s}
+.filter-btn:hover{border-color:#999;color:#333}
+.filter-btn.on{background:var(--red);color:white;border-color:var(--red)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:white;border-radius:var(--radius-lg);width:100%;max-width:760px;box-shadow:var(--shadow-lg);animation:slideUp .2s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.modal-header{background:#111;color:white;padding:20px 24px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;display:flex;align-items:flex-start;gap:16px}
+.modal-code{background:var(--red);color:white;font-family:var(--font-display);font-size:13px;font-weight:800;padding:4px 10px;border-radius:6px;flex-shrink:0;margin-top:2px}
+.modal-title-wrap{flex:1}
+.modal-phase{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.modal-title{font-family:var(--font-display);font-size:18px;font-weight:700;line-height:1.2}
+.modal-close{background:none;border:none;color:#888;cursor:pointer;padding:4px;font-size:20px;line-height:1;margin-top:-2px;transition:color .15s;flex-shrink:0}
+.modal-close:hover{color:white}
+.modal-body{padding:24px}
+.modal-rp{display:flex;align-items:center;gap:8px;margin-bottom:18px;padding:10px 14px;background:var(--RP-bg);border-left:3px solid var(--RP-border);border-radius:0 6px 6px 0}
+.modal-rp-label{font-size:11px;color:var(--RP-dark);font-weight:600}
+.modal-rp-org{font-size:14px;font-weight:700;color:var(--RP-text)}
+.modal-section{margin-bottom:18px}
+.modal-section-title{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.modal-section-title::after{content:'';flex:1;height:1px;background:var(--gray-mid)}
+.modal-text{font-size:13px;color:#444;line-height:1.7}
+.modal-text p{margin-bottom:8px}
+.modal-text p:last-child{margin-bottom:0}
+.modal-highlight{background:var(--gray-light);border-radius:8px;padding:12px 16px;font-size:13px;color:#333;line-height:1.6;margin-bottom:10px}
+.modal-highlight strong{color:#111}
+.modal-tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.modal-tag{font-size:11px;padding:4px 10px;border-radius:12px;font-weight:500}
+.modal-resp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:8px}
+.modal-resp-item{border-radius:8px;padding:8px 10px;font-size:11px;text-align:center;font-weight:500}
+.modal-links{display:flex;flex-direction:column;gap:6px}
+.modal-link{font-size:12px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;word-break:break-all}
+.modal-link:hover{text-decoration:underline}
+.modal-footer{border-top:1px solid var(--gray-mid);padding:14px 24px;display:flex;justify-content:flex-end}
+.btn-close-modal{background:var(--red);color:white;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:background .15s}
+.btn-close-modal:hover{background:#a82020}
+
+/* ── TOOLTIP ── */
+.tooltip{position:fixed;background:#111;color:white;padding:6px 11px;border-radius:7px;font-size:11px;pointer-events:none;z-index:200;display:none;max-width:200px;line-height:1.4}
+
+/* ── PRINT ── */
+@media print{.tabs-bar,.filter-row,.modal-overlay{display:none}.section{display:block !important}.header{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-circle">
+      <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+    <div class="header-text">
+      <h1>Rock in Rio 2024 — Matriz AxR</h1>
+      <p>Matriz de Atividades × Responsabilidades · COR / RIOTUR · Versão 1 — 23/09/24</p>
+    </div>
+    <div class="header-meta">
+      <div class="meta-pill"><strong>7</strong><span>dias de evento</span></div>
+      <div class="meta-pill"><strong>30</strong><span>atividades</span></div>
+      <div class="meta-pill"><strong>16</strong><span>órgãos</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="showTab('visao',this)">📊 Visão geral</button>
+    <button class="tab-btn" onclick="showTab('matriz',this)">📋 Matriz AxR</button>
+    <button class="tab-btn" onclick="showTab('orgaos',this)">🏛 Órgãos</button>
+    <button class="tab-btn" onclick="showTab('operacional',this)">📈 Operacional</button>
+    <button class="tab-btn" onclick="showTab('cronologia',this)">🗓 Cronologia</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- VISÃO GERAL -->
+<div id="tab-visao" class="section active">
+  <div class="metrics-grid">
+    <div class="metric-card"><div class="metric-val">7</div><div class="metric-lab">Dias de evento</div><div class="metric-sub">13–15 e 19–22/set</div></div>
+    <div class="metric-card"><div class="metric-val">16</div><div class="metric-lab">Órgãos envolvidos</div><div class="metric-sub">Municipais e estaduais</div></div>
+    <div class="metric-card"><div class="metric-val">30</div><div class="metric-lab">Atividades mapeadas</div><div class="metric-sub">Planejamento · Mobilização · Show</div></div>
+    <div class="metric-card"><div class="metric-val">3.400</div><div class="metric-lab">Agentes municipais/dia</div><div class="metric-sub">11 secretarias e órgãos</div></div>
+    <div class="metric-card"><div class="metric-val">R$2,6 bi</div><div class="metric-lab">Impacto econômico</div><div class="metric-sub">Estimado no estado do RJ</div></div>
+    <div class="metric-card"><div class="metric-val">95%</div><div class="metric-lab">Ocupação hoteleira</div><div class="metric-sub">Rede do Rio de Janeiro</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Atividades por fase</div>
+      <div class="bar-row"><span class="bar-label">Planejamento (P)</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--red)"></div></div><span class="bar-val">12 atividades</span></div>
+      <div class="bar-row"><span class="bar-label">Mobilização (M)</span><div class="bar-track"><div class="bar-fill" style="width:33%;background:var(--gold)"></div></div><span class="bar-val">5 atividades</span></div>
+      <div class="bar-row"><span class="bar-label">Show / Operação (S)</span><div class="bar-track"><div class="bar-fill" style="width:86%;background:var(--blue)"></div></div><span class="bar-val">13 atividades</span></div>
+      <div style="margin-top:18px">
+        <div class="card-title">Legenda de responsabilidades</div>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-badge badge-RP">RP</span><span><strong>Responsável Principal</strong> — lidera a atividade</span></div>
+          <div class="legend-item"><span class="legend-badge badge-R">R</span><span><strong>Responsável</strong> — executa com autonomia</span></div>
+          <div class="legend-item"><span class="legend-badge badge-A">A</span><span><strong>Apoio</strong> — suporta a execução</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Efetivo operacional estimado</div>
+      <div class="bar-row"><span class="bar-label">PMERJ</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><span class="bar-val">5.200 PMs</span></div>
+      <div class="bar-row"><span class="bar-label">GM / Ord. Pública</span><div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--gold)"></div></div><span class="bar-val">930/dia</span></div>
+      <div class="bar-row"><span class="bar-label">CBMERJ</span><div class="bar-track"><div class="bar-fill" style="width:12%;background:#E24B4A"></div></div><span class="bar-val">600</span></div>
+      <div class="bar-row"><span class="bar-label">Polícia Civil</span><div class="bar-track"><div class="bar-fill" style="width:30%;background:#534AB7"></div></div><span class="bar-val">1.675</span></div>
+      <div class="bar-row"><span class="bar-label">CET-RIO</span><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--green)"></div></div><span class="bar-val">210/dia</span></div>
+      <div class="bar-row"><span class="bar-label">COMLURB</span><div class="bar-track"><div class="bar-fill" style="width:4%;background:#888"></div></div><span class="bar-val">186/dia</span></div>
+      <div class="bar-row"><span class="bar-label">IVISA-Rio (Saúde)</span><div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--red)"></div></div><span class="bar-val">37/dia</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Infra do evento — Cidade do Rock · Parque Olímpico</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
+      <div style="background:var(--gray-light);border-radius:10px;padding:14px 16px">
+        <div style="font-size:11px;color:#888;margin-bottom:4px">Palco Mundo</div>
+        <div style="font-size:15px;font-weight:700;font-family:var(--font-display);color:#111">104m × 30m</div>
+        <div style="font-size:11px;color:#666;margin-top:3px">830 m² de LED · 6 telões</div>
+      </div>
+      <div style="background:var(--gray-light);border-radius:10px;padding:14px 16px">
+        <div style="font-size:11px;color:#888;margin-bottom:4px">Palco Sunset</div>
+        <div style="font-size:15px;font-weight:700;font-family:var(--font-display);color:#111">93m × 27,5m</div>
+        <div style="font-size:11px;color:#666;margin-top:3px">Nova localização vs. edição anterior</div>
+      </div>
+      <div style="background:var(--gray-light);border-radius:10px;padding:14px 16px">
+        <div style="font-size:11px;color:#888;margin-bottom:4px">Câmeras COR</div>
+        <div style="font-size:15px;font-weight:700;font-family:var(--font-display);color:#111">460+</div>
+        <div style="font-size:11px;color:#666;margin-top:3px">Entorno + núcleo avançado + drones</div>
+      </div>
+      <div style="background:var(--gray-light);border-radius:10px;padding:14px 16px">
+        <div style="font-size:11px;color:#888;margin-bottom:4px">Bloqueios viários</div>
+        <div style="font-size:15px;font-weight:700;font-family:var(--font-display);color:#111">28 pontos</div>
+        <div style="font-size:11px;color:#666;margin-top:3px">Só moradores credenciados de carro</div>
+      </div>
+      <div style="background:var(--gray-light);border-radius:10px;padding:14px 16px">
+        <div style="font-size:11px;color:#888;margin-bottom:4px">BRT Expresso</div>
+        <div style="font-size:15px;font-weight:700;font-family:var(--font-display);color:#111">R$23</div>
+        <div style="font-size:11px;color:#666;margin-top:3px">3 linhas especiais · 11h às 5h</div>
+      </div>
+      <div style="background:var(--gray-light);border-radius:10px;padding:14px 16px">
+        <div style="font-size:11px;color:#888;margin-bottom:4px">Hotéis do entorno</div>
+        <div style="font-size:15px;font-weight:700;font-family:var(--font-display);color:#111">35</div>
+        <div style="font-size:11px;color:#666;margin-top:3px">Inspecionados pelo IVISA-Rio</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MATRIZ AxR -->
+<div id="tab-matriz" class="section">
+  <div class="filter-row">
+    <span class="filter-lbl">Filtrar fase:</span>
+    <button class="filter-btn on" onclick="filterPhase('all',this)">Todas</button>
+    <button class="filter-btn" onclick="filterPhase('P',this)">Planejamento</button>
+    <button class="filter-btn" onclick="filterPhase('M',this)">Mobilização</button>
+    <button class="filter-btn" onclick="filterPhase('S',this)">Show / Operação</button>
+  </div>
+  <div class="legend" style="margin-bottom:12px">
+    <div class="legend-item"><span class="legend-badge badge-RP">RP</span> Responsável Principal</div>
+    <div class="legend-item"><span class="legend-badge badge-R">R</span> Responsável</div>
+    <div class="legend-item"><span class="legend-badge badge-A">A</span> Apoio / Participante</div>
+    <div class="legend-item" style="color:#aaa;font-style:italic">💡 Clique no nome de uma atividade para ver os detalhes</div>
+  </div>
+  <div class="table-wrap">
+    <table id="matriz-table">
+      <thead>
+        <tr>
+          <th class="th-act">Atividade</th>
+          <th title="Centro de Operações Rio">COR</th>
+          <th title="RIOTUR">RIOTUR</th>
+          <th title="Promotor do Evento">PROM.</th>
+          <th title="Corpo de Bombeiros MERJ">CBMERJ</th>
+          <th title="Polícia Militar RJ">PMERJ</th>
+          <th title="Guarda Municipal / Ordem Pública">GM/OP</th>
+          <th title="CET-RIO / SMTR">CET-RIO</th>
+          <th title="COMLURB">COMLURB</th>
+          <th title="RIOLUZ">RIOLUZ</th>
+          <th title="CGC">CGC</th>
+          <th title="PCERJ">PCERJ</th>
+          <th title="Alerta Rio">ALERTA</th>
+          <th title="Concessionárias de Serv. Público">CONC.</th>
+          <th title="METRO / BRT">METRO</th>
+          <th title="SMAS / PROCON">SMAS</th>
+          <th title="Secretaria Municipal de Saúde">SAÚDE</th>
+          <th title="Subprefeitura">SUBPREF.</th>
+          <th title="ASCOM">ASCOM</th>
+        </tr>
+      </thead>
+      <tbody id="matriz-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ÓRGÃOS -->
+<div id="tab-orgaos" class="section">
+  <div class="orgs-grid" id="orgs-grid"></div>
+</div>
+
+<!-- OPERACIONAL -->
+<div id="tab-operacional" class="section">
+  <div class="ops-grid" id="ops-grid">
+    <div class="ops-card">
+      <div class="ops-header"><div class="ops-dot" style="background:var(--red)"></div><span class="ops-org">PMERJ</span></div>
+      <div><span class="ops-number">5.200</span><span class="ops-unit">policiais militares</span></div>
+      <div style="margin-top:12px">
+        <div class="bar-row"><span class="bar-label">Viaturas</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><span class="bar-val">143</span></div>
+        <div class="bar-row"><span class="bar-label">Torres de observação</span><div class="bar-track"><div class="bar-fill" style="width:5.5%;background:var(--red)"></div></div><span class="bar-val">8</span></div>
+        <div class="bar-row"><span class="bar-label">Viaturas PCERJ</span><div class="bar-track"><div class="bar-fill" style="width:31%;background:#534AB7"></div></div><span class="bar-val">45/dia</span></div>
+      </div>
+      <div class="ops-detail">+30% de efetivo em relação à edição anterior. CICC Móvel no BRT Parque Olímpico com câmeras de reconhecimento facial e drones. Patrulha Maria da Penha no BRT Centro Olímpico.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-header"><div class="ops-dot" style="background:#E24B4A"></div><span class="ops-org">CBMERJ</span></div>
+      <div><span class="ops-number">600</span><span class="ops-unit">militares mobilizados</span></div>
+      <div style="margin-top:12px">
+        <div class="bar-row"><span class="bar-label">Forças-tarefa</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#E24B4A"></div></div><span class="bar-val">3 pontos</span></div>
+        <div class="bar-row"><span class="bar-label">Plataformas mecânicas</span><div class="bar-track"><div class="bar-fill" style="width:66%;background:#E24B4A"></div></div><span class="bar-val">2 (42m)</span></div>
+      </div>
+      <div class="ops-detail">Ambulâncias, picapes, motos, viaturas de combate a incêndio e salvamento. Caminhão-tanque para abastecimento extra de água. Três unidades de sobreaviso durante todo o festival.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-header"><div class="ops-dot" style="background:var(--green)"></div><span class="ops-org">CET-RIO</span></div>
+      <div><span class="ops-number">210</span><span class="ops-unit">operadores/dia</span></div>
+      <div style="margin-top:12px">
+        <div class="bar-row"><span class="bar-label">Motocicletas</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--green)"></div></div><span class="bar-val">48</span></div>
+        <div class="bar-row"><span class="bar-label">Viaturas operacionais</span><div class="bar-track"><div class="bar-fill" style="width:56%;background:var(--green)"></div></div><span class="bar-val">27</span></div>
+        <div class="bar-row"><span class="bar-label">Reboques</span><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--green)"></div></div><span class="bar-val">17</span></div>
+        <div class="bar-row"><span class="bar-label">Pontos de bloqueio</span><div class="bar-track"><div class="bar-fill" style="width:58%;background:var(--green)"></div></div><span class="bar-val">28</span></div>
+        <div class="bar-row"><span class="bar-label">Painéis de mensagem</span><div class="bar-track"><div class="bar-fill" style="width:87%;background:var(--green)"></div></div><span class="bar-val">43</span></div>
+      </div>
+      <div class="ops-detail">OCR nos pontos de bloqueio para leitura de placas. 500 galhardetes de proibição de estacionamento.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-header"><div class="ops-dot" style="background:#888"></div><span class="ops-org">COMLURB</span></div>
+      <div><span class="ops-number">186</span><span class="ops-unit">garis por dia</span></div>
+      <div style="margin-top:12px">
+        <div class="bar-row"><span class="bar-label">Sopradores</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#888"></div></div><span class="bar-val">11</span></div>
+        <div class="bar-row"><span class="bar-label">Mini basculantes</span><div class="bar-track"><div class="bar-fill" style="width:54%;background:#888"></div></div><span class="bar-val">6</span></div>
+        <div class="bar-row"><span class="bar-label">Caminhões compactadores</span><div class="bar-track"><div class="bar-fill" style="width:27%;background:#888"></div></div><span class="bar-val">3</span></div>
+        <div class="bar-row"><span class="bar-label">Caixas metálicas (1.200L)</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#888"></div></div><span class="bar-val">124</span></div>
+      </div>
+      <div class="ops-detail">3 turnos, 24h. Varredeiras de grande porte, pipas d'água e vans com motobomba. Programa Lixo Zero no entorno do evento.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-header"><div class="ops-dot" style="background:var(--blue)"></div><span class="ops-org">BRT Expresso Rock in Rio</span></div>
+      <div><span class="ops-number">R$23</span><span class="ops-unit">ida + volta</span></div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:7px">
+        <div style="background:var(--gray-light);border-radius:7px;padding:8px 11px;font-size:11px;color:#333"><strong>SE008</strong> — Jardim Oceânico → Centro Olímpico (direto)</div>
+        <div style="background:var(--gray-light);border-radius:7px;padding:8px 11px;font-size:11px;color:#333"><strong>SE009</strong> — Alvorada → Centro Olímpico (direto)</div>
+        <div style="background:var(--gray-light);border-radius:7px;padding:8px 11px;font-size:11px;color:#333"><strong>SE010</strong> — Paulo da Portela → Morro do Outeiro (semidireto)</div>
+      </div>
+      <div class="ops-detail">Funcionamento das 11h às 5h. Pagamento somente com Jaé ou RioCard. Pulseiras diárias com cores diferentes para embarque rápido no retorno.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-header"><div class="ops-dot" style="background:#7B5EA7"></div><span class="ops-org">Metrô + VLT</span></div>
+      <div><span class="ops-number">R$7,50</span><span class="ops-unit">por trecho (metrô)</span></div>
+      <div class="ops-detail" style="margin-top:12px">Estação Jardim Oceânico aberta 24h. Linhas 1+4 (Uruguai → Jardim Oceânico). VLT Linha 1 (Santos Dumont–Terminal Gentileza) 24h nos 7 dias, com reforço das 23h às 5h a cada 30 min.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-header"><div class="ops-dot" style="background:#A0522D"></div><span class="ops-org">COR — Monitoramento</span></div>
+      <div><span class="ops-number">460+</span><span class="ops-unit">câmeras de vigilância</span></div>
+      <div style="margin-top:12px">
+        <div class="bar-row"><span class="bar-label">Servidores no COR</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#A0522D"></div></div><span class="bar-val">~250</span></div>
+      </div>
+      <div class="ops-detail">COR Avançado dentro do Parque Olímpico. 1 coordenador + 6 operadores exclusivos para o entorno. Civitas com IA para monitorar fluxo de veículos e pessoas. Cerco Eletrônico de placas em tempo real.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-header"><div class="ops-dot" style="background:var(--red)"></div><span class="ops-org">Saúde / IVISA-Rio</span></div>
+      <div><span class="ops-number">37</span><span class="ops-unit">agentes IVISA/dia</span></div>
+      <div class="ops-detail" style="margin-top:12px">Vigilância sanitária em alimentos, saúde e embelezamento. Coleta de amostras de água e alimentos. CIEVS presente do portão até o encerramento. Monitoramento epidemiológico por semanas após o evento. 35 hotéis do entorno inspecionados.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CRONOLOGIA -->
+<div id="tab-cronologia" class="section">
+  <div class="card" style="max-width:720px">
+    <div class="card-title">Linha do tempo do evento</div>
+    <div class="timeline">
+      <div class="tl-line"></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">Meses antes</div><div class="tl-text">Início da montagem das estruturas no Parque Olímpico. Palco Mundo (104m × 30m, 830 m² de LED, 6 telões) e Palco Sunset (93m × 27,5m, nova localização) são erguidos na Cidade do Rock.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">4 de setembro</div><div class="tl-text">Diário Oficial publica trajetos do bolsão de táxi especial na Av. Embaixador Abelardo Bueno para os dias de show (22h–5h).</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">6 de setembro</div><div class="tl-text">Prefeitura do Rio apresenta planejamento operacional: ~3.400 agentes de 11 secretarias confirmados para Rock in Rio e partidas da Copa Libertadores. Recomendação de uso de transporte público.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">9 de setembro</div><div class="tl-text">Governo do RJ anuncia plano operacional completo. PMERJ confirma 5.200 PMs (+30%), 143 viaturas, 8 torres de observação, CICC Móvel. CBMERJ confirma 600 militares e 3 forças-tarefa. Polícia Civil com 1.675 agentes, 45 viaturas/dia.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">13 de setembro — Dia 1</div><div class="tl-text">Abertura do festival. Tempo quente e seco, alta pressão. Máxima de 40°C, umidade entre 12–20%. Alerta Rio emite condições favoráveis. COR Avançado operacional.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">14 de setembro — Dia 2</div><div class="tl-text">Céu claro a parcialmente nublado, sem chuva. Ventos moderados, mais intensos pela manhã. Umidade entre 21–30% à tarde.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">15 de setembro — Dia 3</div><div class="tl-text">Ventos do oceano trazem nebulosidade. Chuviscos à noite — Potencial Gatilho 1 acionado (chuva &lt; 5mm/h). Temperaturas em declínio.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">16 de setembro — Madrugada</div><div class="tl-text">Operação do RIR em fase final. Drone do COR é deslocado às ~2h para atender desabamento em Cascadura (imóvel residencial em comunidade).</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">19 de setembro — Dia 4</div><div class="tl-text">Retorno do festival após intervalo. Alta pressão, céu variando entre claro e parcialmente nublado. Ventos moderados a fortes, máxima de 31°C, mínima de 15°C.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">20 de setembro — Dia 5</div><div class="tl-text">Tempo estável, sem chuva. Ventos moderados a fortes — Potencial Gatilho 1 monitorado.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">21 de setembro — Dia 6</div><div class="tl-text">Instabilidade em médios níveis da atmosfera. Aumento de nebulosidade e chuva fraca a moderada a partir da tarde, podendo ultrapassar 5mm/h — <strong>Potencial Gatilho 2 acionado</strong>.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">22 de setembro — Dia 7 (último)</div><div class="tl-text">Chuva fraca isolada na madrugada (Gatilho 1). Tarde ensolarada com alta pressão, ventos fracos a moderados. Encerramento tranquilo do festival.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">Pós-evento</div><div class="tl-text">CIEVS mantém monitoramento epidemiológico nas semanas seguintes para identificar eventuais surtos relacionados ao evento. Impacto econômico estimado: R$2,6 bilhões. Rodoviária do Rio registrou 40% mais passageiros nos dias de show.</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- MODAL DE DETALHES DA ATIVIDADE -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <span class="modal-code" id="m-code">P.1</span>
+      <div class="modal-title-wrap">
+        <div class="modal-phase" id="m-phase">Planejamento</div>
+        <div class="modal-title" id="m-title">Título da atividade</div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="m-body"></div>
+    <div class="modal-footer">
+      <button class="btn-close-modal" onclick="document.getElementById('modal-overlay').classList.remove('open')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const COLS=['COR','RIOTUR','PROM','CBMERJ','PMERJ','GM','CET','COMLURB','RIOLUZ','CGC','PCERJ','ALERTA','CONC','METRO','SMAS','SAUDE','SUBPREF','ASCOM'];
+const COL_NAMES={COR:'Centro de Operações Rio',RIOTUR:'RIOTUR',PROM:'Promotor do Evento',CBMERJ:'CBMERJ',PMERJ:'PMERJ',GM:'Guarda Municipal / Ord. Pública',CET:'CET-RIO / SMTR',COMLURB:'COMLURB',RIOLUZ:'RIOLUZ',CGC:'CGC',PCERJ:'PCERJ',ALERTA:'Alerta Rio',CONC:'Conc. Serv. Público',METRO:'Metrô / BRT',SMAS:'SMAS / PROCON',SAUDE:'Secretaria de Saúde',SUBPREF:'Subprefeitura',ASCOM:'ASCOM'};
+
+const MATRIX=[
+  {phase:'Planejamento',code:'P.1',label:'Definir locais das estruturas fixas e móveis',data:{COR:null,RIOTUR:'A',PROM:'RP',CBMERJ:null,PMERJ:null,GM:null,CET:null,COMLURB:'A',RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:'A',ASCOM:null}},
+  {phase:'Planejamento',code:'P.2',label:'Definir e divulgar a programação do evento',data:{COR:'R',RIOTUR:'R',PROM:'RP',CBMERJ:null,PMERJ:null,GM:null,CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:'R'}},
+  {phase:'Planejamento',code:'P.3',label:'Realizar reuniões operacionais de integração entre os órgãos',data:{COR:'RP',RIOTUR:'R',PROM:'R',CBMERJ:'A',PMERJ:'A',GM:'A',CET:'A',COMLURB:'A',RIOLUZ:'A',CGC:'A',PCERJ:'A',ALERTA:'A',CONC:'A',METRO:'A',SMAS:'A',SAUDE:'A',SUBPREF:'A',ASCOM:'A'}},
+  {phase:'Planejamento',code:'P.4',label:'Montar palco e demais estruturas de apoio (ARTs)',data:{COR:null,RIOTUR:'A',PROM:'RP',CBMERJ:'A',PMERJ:null,GM:null,CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:null}},
+  {phase:'Planejamento',code:'P.5',label:'Fiscalizar montagem das estruturas e autorizar o evento',data:{COR:null,RIOTUR:'A',PROM:'A',CBMERJ:'RP',PMERJ:null,GM:null,CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:'A',ASCOM:null}},
+  {phase:'Planejamento',code:'P.6',label:'Elaborar Planos de Emergência, Contingências e Operacionais',data:{COR:'R',RIOTUR:'RP',PROM:'R',CBMERJ:'R',PMERJ:'R',GM:'R',CET:'R',COMLURB:'R',RIOLUZ:'R',CGC:'R',PCERJ:'R',ALERTA:'R',CONC:'R',METRO:'R',SMAS:'R',SAUDE:'R',SUBPREF:'R',ASCOM:'R'}},
+  {phase:'Planejamento',code:'P.7',label:'Monitorar condições climáticas antes, durante e após o evento',data:{COR:'R',RIOTUR:'A',PROM:'R',CBMERJ:'A',PMERJ:'A',GM:'A',CET:'A',COMLURB:'A',RIOLUZ:'A',CGC:'A',PCERJ:'A',ALERTA:'RP',CONC:'A',METRO:'A',SMAS:'A',SAUDE:'A',SUBPREF:'A',ASCOM:'R'}},
+  {phase:'Planejamento',code:'P.8',label:'Divulgar esclarecimentos sobre o evento à população',data:{COR:'A',RIOTUR:'RP',PROM:'R',CBMERJ:null,PMERJ:null,GM:null,CET:'R',COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:'R',ASCOM:'R'}},
+  {phase:'Planejamento',code:'P.9',label:'Estruturar assistência à saúde e instalação de postos',data:{COR:null,RIOTUR:'A',PROM:'A',CBMERJ:'R',PMERJ:null,GM:'A',CET:null,COMLURB:null,RIOLUZ:'A',CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:'A',SAUDE:'RP',SUBPREF:'A',ASCOM:'A'}},
+  {phase:'Planejamento',code:'P.10',label:'Plano do sistema de transporte (vias, metro, ônibus, BRT)',data:{COR:null,RIOTUR:'R',PROM:'A',CBMERJ:null,PMERJ:'A',GM:'R',CET:'RP',COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:'R',SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:'R'}},
+  {phase:'Planejamento',code:'P.11',label:'Instalar unidade avançada de monitoramento (câmeras)',data:{COR:'RP',RIOTUR:'A',PROM:null,CBMERJ:null,PMERJ:null,GM:'A',CET:'R',COMLURB:null,RIOLUZ:'A',CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:'A'}},
+  {phase:'Planejamento',code:'P.12',label:'Prever rotas de acesso para ambulâncias e equipes de emergência',data:{COR:'A',RIOTUR:'R',PROM:'A',CBMERJ:'A',PMERJ:'A',GM:'R',CET:'RP',COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:'R',SUBPREF:null,ASCOM:'R'}},
+  {phase:'Mobilização',code:'M.1',label:'Manter equipe de sobreaviso / prontidão',data:{COR:'A',RIOTUR:'A',PROM:'A',CBMERJ:'A',PMERJ:'A',GM:'A',CET:'A',COMLURB:'A',RIOLUZ:'A',CGC:'A',PCERJ:'A',ALERTA:'A',CONC:'A',METRO:'A',SMAS:'A',SAUDE:'A',SUBPREF:'A',ASCOM:'A'}},
+  {phase:'Mobilização',code:'M.2',label:'Acionar órgãos responsáveis em situações inesperadas',data:{COR:'RP',RIOTUR:'R',PROM:'R',CBMERJ:'A',PMERJ:'A',GM:'A',CET:'A',COMLURB:'A',RIOLUZ:'A',CGC:'A',PCERJ:'A',ALERTA:'A',CONC:'A',METRO:'A',SMAS:'A',SAUDE:'A',SUBPREF:'A',ASCOM:'A'}},
+  {phase:'Mobilização',code:'M.3',label:'Receber informações da população e/ou imprensa sobre eventualidades',data:{COR:'RP',RIOTUR:'R',PROM:'R',CBMERJ:'R',PMERJ:'R',GM:'R',CET:'A',COMLURB:'A',RIOLUZ:'A',CGC:'A',PCERJ:'A',ALERTA:null,CONC:'A',METRO:'A',SMAS:'A',SAUDE:'A',SUBPREF:'A',ASCOM:'RP'}},
+  {phase:'Mobilização',code:'M.4',label:'Montar bloqueios de trânsito (TRÂNSITO LIVRE)',data:{COR:null,RIOTUR:'A',PROM:null,CBMERJ:null,PMERJ:'R',GM:'RP',CET:'R',COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:null}},
+  {phase:'Mobilização',code:'M.5',label:'Controle urbano / coibir comércio irregular no entorno',data:{COR:null,RIOTUR:null,PROM:null,CBMERJ:null,PMERJ:'A',GM:'RP',CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:null}},
+  {phase:'Show / Operação',code:'S.1',label:'Preservação da segurança pública (presença ostensiva)',data:{COR:null,RIOTUR:null,PROM:null,CBMERJ:null,PMERJ:'RP',GM:'R',CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:'R',ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:null}},
+  {phase:'Show / Operação',code:'S.2',label:'Registro de ocorrências policiais e ações correlatas',data:{COR:null,RIOTUR:null,PROM:null,CBMERJ:null,PMERJ:'R',GM:'A',CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:'RP',ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:null}},
+  {phase:'Show / Operação',code:'S.3',label:'Proteção e ordem nas ações dos órgãos públicos',data:{COR:null,RIOTUR:null,PROM:null,CBMERJ:null,PMERJ:'R',GM:'RP',CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:null}},
+  {phase:'Show / Operação',code:'S.4',label:'Ações de socorro e resgate na Orla e vias públicas',data:{COR:'A',RIOTUR:null,PROM:null,CBMERJ:'RP',PMERJ:'A',GM:'A',CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:'A',SUBPREF:null,ASCOM:null}},
+  {phase:'Show / Operação',code:'S.5',label:'Prestar atendimento médico nos postos',data:{COR:null,RIOTUR:null,PROM:null,CBMERJ:null,PMERJ:null,GM:null,CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:'RP',SUBPREF:null,ASCOM:null}},
+  {phase:'Show / Operação',code:'S.6',label:'Atender pessoas perdidas e assistência social',data:{COR:'A',RIOTUR:null,PROM:null,CBMERJ:'A',PMERJ:null,GM:'A',CET:null,COMLURB:null,RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:'RP',SAUDE:null,SUBPREF:null,ASCOM:'A'}},
+  {phase:'Show / Operação',code:'S.7',label:'Limpeza da região (varrição, coleta e recolhimento de lixo)',data:{COR:null,RIOTUR:null,PROM:null,CBMERJ:null,PMERJ:null,GM:null,CET:null,COMLURB:'RP',RIOLUZ:null,CGC:null,PCERJ:null,ALERTA:null,CONC:null,METRO:null,SMAS:null,SAUDE:null,SUBPREF:null,ASCOM:null}},
+];
+
+const DETAILS={
+  'P.1':{
+    rp:'Promotor do Evento',
+    highlights:[
+      {label:'Palco Mundo',val:'104m × 30m · 830 m² de LED · 6 telões'},
+      {label:'Palco Sunset',val:'93m × 27,5m · Nova localização (antes Rock Street)'},
+      {label:'Local',val:'Parque Olímpico — Cidade do Rock · Barra da Tijuca'},
+    ],
+    text:'A montagem do Rock in Rio 2024 começou meses antes do início do festival, com a construção das estruturas dos palcos e a transformação do Parque Olímpico na Cidade do Rock. O Palco Mundo e o Palco Sunset tiveram o mesmo tamanho na boca de cena pela primeira vez. O Palco Sunset recebeu nova localização, no espaço que antes abrigava a Rock Street, devido à chegada do Global Village.',
+    links:['https://rockinrio.com/rio/pt-br/informacoes/','https://conexaopop.com.br/eventos/rock-in-rio/2024-mapa-da-cidade-do-rock/'],
+  },
+  'P.2':{
+    rp:'Promotor do Evento',
+    highlights:[
+      {label:'Cobertura',val:'Rede Globo e G1 com transmissão ao vivo'},
+      {label:'Acesso',val:'7 dias de festival · 13–15 e 19–22 de setembro'},
+    ],
+    text:'A definição e divulgação da programação do evento ficou a cargo do Promotor, com amplo apoio de comunicação da Rede Globo e G1, inclusive com transmissão ao vivo dos shows. O evento contou com atrações nacionais e internacionais distribuídas nos sete dias de festival.',
+    links:['https://g1.globo.com/pop-arte/musica/rock-in-rio/2024/noticia/2024/08/20/horarios-do-rock-in-rio-2024-veja-a-programacao-completa-dos-shows-em-cada-dia.ghtml'],
+  },
+  'P.3':{
+    rp:'COR — Centro de Operações Rio',
+    highlights:[
+      {label:'Impacto econômico',val:'R$2,6 bilhões estimados no estado do RJ'},
+      {label:'Ocupação hoteleira',val:'95% da rede do Rio de Janeiro'},
+      {label:'Rodoviária',val:'+40% de passageiros nos dias de evento'},
+    ],
+    text:'Diversas reuniões de planejamento e integração operacional foram realizadas no Centro de Operações Rio. Todos os 16 órgãos participaram como Apoio nestas reuniões, garantindo alinhamento de procedimentos, ajustes de planejamento e integração dos planos operacionais de cada instituição antes do início do festival.',
+    links:['https://g1.globo.com/pop-arte/musica/rock-in-rio/2024/noticia/2024/09/09/governo-do-rj-anuncia-plano-operacional-para-o-rock-in-rio.ghtml'],
+  },
+  'P.4':{
+    rp:'Promotor do Evento',
+    highlights:[
+      {label:'Palco Mundo',val:'104m × 30m · 830 m² de LED · 6 telões'},
+      {label:'Palco Sunset',val:'93m × 27,5m'},
+      {label:'ARTs',val:'Anotações de Responsabilidade Técnica recolhidas'},
+    ],
+    text:'O Promotor do evento é responsável por montar toda a estrutura no interior do Parque Olímpico, incluindo os palcos e demais estruturas de apoio, e recolher as respectivas Anotações de Responsabilidade Técnica (ARTs) exigidas pelos órgãos de fiscalização.',
+    links:['https://www.youtube.com/watch?v=MUkuZf5gRto'],
+  },
+  'P.5':{
+    rp:'CBMERJ — Corpo de Bombeiros Militar do RJ',
+    highlights:[
+      {label:'Responsabilidade',val:'Fiscalizar montagem e emitir autorização'},
+      {label:'Militares',val:'600 mobilizados para o evento'},
+    ],
+    text:'O CBMERJ é responsável por fiscalizar a montagem dos palcos e demais estruturas, verificando o cumprimento das normas de segurança, e autorizar a realização do evento após aprovação técnica. Sem a autorização do Corpo de Bombeiros, o festival não pode ocorrer.',
+    links:[],
+  },
+  'P.6':{
+    rp:'RIOTUR',
+    highlights:[
+      {label:'PMERJ',val:'5.200 PMs · 143 viaturas · 8 torres · CICC Móvel'},
+      {label:'Polícia Civil',val:'1.675 agentes · 714 exclusivos · 45 viaturas/dia'},
+      {label:'Trânsito',val:'Câmeras de reconhecimento de placas no entorno'},
+    ],
+    text:'Diversos órgãos e instituições elaboraram seus planos operacionais e de contingência. A PMERJ instalou um Centro Integrado de Comando e Controle (CICC) Móvel no BRT Parque Olímpico, com câmeras de reconhecimento facial e drones. A Polícia Civil instalou uma central de flagrantes extraordinários na 16ª DP (Barra da Tijuca) e 42ª DP (Recreio). A Prefeitura restringiu o acesso veicular ao entorno, com câmeras de reconhecimento de placas. A Operação Lei Seca contou com 42 agentes nas vias de acesso ao evento.',
+    links:['https://g1.globo.com/pop-arte/musica/rock-in-rio/2024/noticia/2024/09/09/governo-do-rj-anuncia-plano-operacional-para-o-rock-in-rio.ghtml'],
+  },
+  'P.7':{
+    rp:'Alerta Rio',
+    highlights:[
+      {label:'13/09 — Dia 1',val:'Céu claro · Máx. 40°C · Umidade 12–20%'},
+      {label:'14/09 — Dia 2',val:'Parcialmente nublado · Sem chuva'},
+      {label:'15/09 — Dia 3',val:'Chuviscos à noite · Gatilho 1'},
+      {label:'19/09 — Dia 4',val:'Estável · Máx. 31°C · Mín. 15°C'},
+      {label:'20/09 — Dia 5',val:'Estável · Ventos fortes · Gatilho 1'},
+      {label:'21/09 — Dia 6',val:'Chuva moderada tarde · Gatilho 2'},
+      {label:'22/09 — Dia 7',val:'Chuva fraca madrugada · Tarde ensolarada'},
+    ],
+    text:'O Alerta Rio atuou 24h por dia, 7 dias por semana, no Centro de Operações Rio, realizando a previsão e monitoramento meteorológico. Emitiu boletins diários para todos os órgãos envolvidos e acionou os gatilhos de contingência quando as condições climáticas exigiram. O dia 21/09 foi o mais crítico, com acionamento do Gatilho 2 (chuva acima de 5mm/h).',
+    links:[],
+  },
+  'P.8':{
+    rp:'RIOTUR',
+    highlights:[
+      {label:'Agentes municipais',val:'~3.400 agentes de 11 secretarias'},
+      {label:'Transporte recomendado',val:'BRT Expresso + MetrôRio'},
+      {label:'Acesso de carros',val:'Apenas moradores credenciados e serviço'},
+    ],
+    text:'A Rede Globo e a Prefeitura do Rio divulgaram amplamente as ações de planejamento e operação do evento por vários dias antes do show. Em 6 de setembro, a Prefeitura apresentou o planejamento operacional completo, incluindo o esquema de transporte e a recomendação de uso do transporte público.',
+    links:['https://cor.rio/prefeitura-apresenta-planejamento-operacional-para-grandes-eventos-de-setembro/','https://g1.globo.com/rj/rio-de-janeiro/noticia/2024/09/06/coletiva-operacao-libertadores-e-rock-in-rio.ghtml'],
+  },
+  'P.9':{
+    rp:'Secretaria Municipal de Saúde',
+    highlights:[
+      {label:'IVISA-Rio',val:'37 agentes por dia no festival'},
+      {label:'Hotéis inspecionados',val:'35 hotéis do entorno'},
+      {label:'CIEVS',val:'Presente da abertura ao encerramento diário'},
+    ],
+    text:'Dentro da área do Rock in Rio, o atendimento médico é responsabilidade dos organizadores do evento. A SMS atua em duas frentes: vigilância em saúde e vigilância sanitária. O IVISA-Rio orienta e fiscaliza estabelecimentos de alimentos, saúde e embelezamento, coleta amostras para análise laboratorial e fiscaliza produtos derivados do tabaco. Após o festival, o CIEVS mantém monitoramento epidemiológico nas semanas seguintes.',
+    links:[],
+  },
+  'P.10':{
+    rp:'CET-RIO & SMTR',
+    highlights:[
+      {label:'BRT SE008',val:'Jardim Oceânico → Centro Olímpico (direto)'},
+      {label:'BRT SE009',val:'Alvorada → Centro Olímpico (direto)'},
+      {label:'BRT SE010',val:'Paulo da Portela → Morro do Outeiro (semidireto)'},
+      {label:'Tarifa BRT',val:'R$23 ida+volta · 11h às 5h · Jaé ou RioCard'},
+      {label:'Metrô',val:'R$7,50/trecho · Jardim Oceânico aberta 24h'},
+      {label:'VLT Linha 1',val:'24h nos 7 dias · Santos Dumont → Terminal Gentileza'},
+      {label:'Táxi (bolsão)',val:'Av. Embaixador Abelardo Bueno · 22h às 5h'},
+      {label:'Bloqueios viários',val:'28 pontos com OCR · só moradores credenciados'},
+    ],
+    text:'Apenas veículos de moradores cadastrados, veículos oficiais e credenciados do festival puderam circular no entorno da Cidade do Rock. O público foi orientado a usar o Expresso Rock in Rio (BRT), o MetrôRio ou os ônibus Primeira Classe. O BRT cobrava R$4,30 na entrada, com complemento tarifário na chegada ao Terminal Centro Olímpico — onde era entregue pulseira colorida para retorno rápido. Cada dia tinha pulseiras com cores diferentes. O Terminal Gentileza integrou ônibus municipais, BRT e VLT para passageiros vindos da Rodoviária e do Aeroporto Tom Jobim.',
+    links:[],
+  },
+  'P.11':{
+    rp:'COR — Centro de Operações Rio',
+    highlights:[
+      {label:'Câmeras',val:'460+ câmeras de vigilância das ruas'},
+      {label:'COR Avançado',val:'1 coordenador + 6 operadores no Parque Olímpico'},
+      {label:'Civitas / IA',val:'Monitoramento de fluxo + Cerco Eletrônico de placas'},
+    ],
+    text:'O Centro de Operações da Prefeitura do Rio montou o "COR Avançado" — uma estrutura dentro da área do Rock in Rio para monitorar as vias do entorno, com conexão direta ao COR da Cidade Nova. A Civitas utilizou Inteligência Artificial para monitorar o fluxo de veículos e pessoas e identificar movimentações suspeitas. O Cerco Eletrônico monitorou placas em tempo real, alertando as forças de segurança em caso de acesso de veículos não autorizados. Drones cobriam pontos cegos e auxiliavam na tomada de decisões.',
+    links:['https://cor.rio/22-09-rock-in-rio-2024-acompanhe-aqui-em-tempo-real-as-principais-informacoes-do-ultimo-dia-de-evento/'],
+  },
+  'P.12':{
+    rp:'CET-RIO & SMTR',
+    highlights:[
+      {label:'Rotas emergenciais',val:'Para ambulâncias e equipes de apoio'},
+    ],
+    text:'Os órgãos responsáveis montaram rotas emergenciais específicas para o deslocamento de ambulâncias e demais equipes de emergência, garantindo acesso rápido à área do evento mesmo com os bloqueios viários e o grande fluxo de público.',
+    links:[],
+  },
+  'M.1':{
+    rp:'Todos os órgãos (A)',
+    highlights:[
+      {label:'Cobertura',val:'Todos os 16 órgãos em estado de prontidão'},
+    ],
+    text:'Todos os órgãos e instituições participantes da Matriz AxR mantiveram equipes em estado de sobreaviso e prontidão durante todo o período do evento — antes, durante e após cada dia de show — prontas para acionamento imediato em qualquer situação inesperada.',
+    links:[],
+  },
+  'M.2':{
+    rp:'COR — Centro de Operações Rio',
+    highlights:[
+      {label:'Coordenação',val:'COR como central de acionamento'},
+    ],
+    text:'O Centro de Operações Rio atuou como ponto central para acionamento dos órgãos responsáveis diante de qualquer situação inesperada ou indesejada identificada durante o evento. Todos os demais órgãos foram responsáveis ou apoio no recebimento e resposta aos acionamentos.',
+    links:[],
+  },
+  'M.3':{
+    rp:'COR e ASCOM (ambos RP)',
+    highlights:[
+      {label:'Canais',val:'COR e ASCOM como portas de entrada principais'},
+    ],
+    text:'Duas organizações compartilharam a responsabilidade principal de receber informações: o COR (Centro de Operações Rio) para ocorrências operacionais e a ASCOM (Assessoria de Comunicação) para demandas da imprensa e do público em geral. Todos os demais órgãos participaram como Apoio ou Responsáveis nesta cadeia de informação.',
+    links:[],
+  },
+  'M.4':{
+    rp:'Guarda Municipal / Ordem Pública',
+    highlights:[
+      {label:'Bloqueios',val:'Conforme planejamento da CET-RIO'},
+      {label:'Acesso permitido',val:'Ônibus, taxis, ambulâncias, veículos "TRÂNSITO LIVRE"'},
+    ],
+    text:'A Guarda Municipal e a Ordem Pública foram responsáveis por montar e operar os bloqueios de trânsito, permitindo entrada apenas dos veículos autorizados: ônibus, táxis, ambulâncias, veículos de emergência e veículos com identificação de "TRÂNSITO LIVRE". A CET-RIO apoiou na operação e a PMERJ na fiscalização.',
+    links:[],
+  },
+  'M.5':{
+    rp:'Guarda Municipal / Ordem Pública',
+    highlights:[
+      {label:'Atuação',val:'Controle do comércio irregular no entorno'},
+    ],
+    text:'A Ordem Pública atuou firmemente no controle urbano da região e entorno do evento, visando coibir o comércio irregular. A PMERJ atuou como apoio nessa operação. Agentes da SEOP fiscalizaram táxis e transporte complementar no entorno.',
+    links:[],
+  },
+  'S.1':{
+    rp:'PMERJ — Polícia Militar do Estado do RJ',
+    highlights:[
+      {label:'Efetivo',val:'5.200 PMs (+30% vs. edição anterior)'},
+      {label:'Viaturas',val:'143 viaturas · 8 torres de observação'},
+      {label:'CICC Móvel',val:'BRT Parque Olímpico · Reconhecimento facial + drones'},
+    ],
+    text:'A PMERJ atuou firmemente na preservação da segurança pública por meio da presença ostensiva. O Centro Integrado de Comando e Controle (CICC) Móvel integrou todas as atividades de segurança no evento, concentrando toda a estrutura tecnológica. Os terminais Alvorada, Centro Olímpico, Recreio e Jardim Oceânico contaram com reforço no policiamento motorizado. A Patrulha Maria da Penha esteve presente no BRT Centro Olímpico.',
+    links:[],
+  },
+  'S.2':{
+    rp:'PCERJ — Polícia Civil do Estado do RJ',
+    highlights:[
+      {label:'Agentes',val:'1.675 mobilizados · 714 exclusivos para o evento'},
+      {label:'Viaturas',val:'45 por dia'},
+      {label:'DPs',val:'Central de flagrantes na 16ª e 42ª DPs'},
+    ],
+    text:'A Polícia Civil instalou central de flagrantes extraordinários na 16ª DP (Barra da Tijuca) e 42ª DP (Recreio dos Bandeirantes). Equipes especializadas em crimes contra mulheres, turistas e raciais atuaram no evento. A inteligência policial monitorou quadrilhas especializadas em roubo de celulares e furtos em eventos de massa.',
+    links:[],
+  },
+  'S.3':{
+    rp:'Guarda Municipal / Ordem Pública',
+    highlights:[
+      {label:'Efetivo',val:'930 agentes/dia'},
+      {label:'Patrulha aquática',val:'Catamarã na Lagoa de Jacarepaguá'},
+    ],
+    text:'A Guarda Municipal garantiu a proteção e a ordem nas ações dos órgãos públicos. Mais de 330 guardas municipais atuaram na fiscalização e monitoramento do trânsito e na operação de bloqueios viários. Pela primeira vez, equipes da GM-Rio patrulharam a Lagoa de Jacarepaguá com um catamarã com capacidade para 20 agentes da Guarda Marítima.',
+    links:[],
+  },
+  'S.4':{
+    rp:'CBMERJ — Corpo de Bombeiros',
+    highlights:[
+      {label:'Ambulâncias',val:'Disponíveis para resgate e socorro'},
+      {label:'Plataformas',val:'2 unidades de até 42 metros de altura'},
+    ],
+    text:'O CBMERJ coordenou as ações de socorro e resgate na Orla e vias públicas. Atuou com ambulâncias, picapes, motocicletas, viaturas de combate a incêndio e salvamento. O COR apoiou o monitoramento das ocorrências externas. A Secretaria de Saúde também participou como apoio no atendimento a vítimas.',
+    links:[],
+  },
+  'S.5':{
+    rp:'Secretaria Municipal de Saúde',
+    highlights:[
+      {label:'Responsabilidade interna',val:'Dentro do RIR: equipe médica dos organizadores'},
+      {label:'Rede municipal',val:'SMS com funcionamento pleno para casos graves'},
+    ],
+    text:'Dentro da área do Rock in Rio, o atendimento médico foi responsabilidade dos organizadores do evento. A Secretaria Municipal de Saúde manteve a rede de urgência e emergência com funcionamento pleno para receber pacientes encaminhados com quadros mais graves. A Central Municipal de Regulação coordenou as transferências necessárias.',
+    links:[],
+  },
+  'S.6':{
+    rp:'SMAS / PROCON',
+    highlights:[
+      {label:'PROCON',val:'22 agentes · Código de Defesa do Consumidor'},
+      {label:'Assistência social',val:'Atendimento a pessoas perdidas, menores e deficientes'},
+    ],
+    text:'O Procon Carioca atuou no cumprimento do Código de Defesa do Consumidor com 22 agentes no local, conferindo licenciamento de vendedores ambulantes, monitorando preços e qualidade dos produtos e inspecionando estabelecimentos. A SMAS liderou o atendimento a pessoas perdidas (menores e deficientes) e ações de assistência social.',
+    links:[],
+  },
+  'S.7':{
+    rp:'COMLURB',
+    highlights:[
+      {label:'Garis',val:'186 por dia · 3 turnos · 24 horas'},
+      {label:'Caixas de lixo',val:'124 metálicas de 1.200L no percurso'},
+      {label:'Lixo Zero',val:'Programa de fiscalização no entorno'},
+    ],
+    text:'A COMLURB preparou esquema especial de limpeza cobrindo o Parque Olímpico e o entorno (Av. Abelardo Bueno, Salvador Allende, Ayrton Senna, Américas, Armando Lombardi e Ministro Ivan Lins). O esquema incluiu 11 sopradores, 6 mini basculantes, 3 caminhões compactadores, 2 varredeiras de grande porte, 1 varredeira compacta, 2 pipas d\'água e 2 vans com motobomba para lavagem das ruas. O Programa Lixo Zero fiscalizou descarte irregular e urina em vias públicas.',
+    links:[],
+  },
+};
+
+const ORGS=[
+  {key:'COR',name:'Centro de Operações Rio',icon:'📡',color:'#C8292A',desc:'Monitoramento em tempo real com 460+ câmeras, COR Avançado no Parque Olímpico e drones. Civitas com IA e Cerco Eletrônico.',rp:3,r:3,a:12},
+  {key:'RIOTUR',name:'RIOTUR',icon:'🏖️',color:'#D4920A',desc:'Coordenação turística, elaboração dos planos de emergência e divulgação de informações ao público e moradores da região.',rp:3,r:5,a:8},
+  {key:'PROM',name:'Promotor do Evento',icon:'🎸',color:'#7F77DD',desc:'Rock in Rio S.A. — responsável pela estrutura física, programação artística e operação interna da Cidade do Rock.',rp:4,r:3,a:7},
+  {key:'CBMERJ',name:'CBMERJ',icon:'🚒',color:'#E24B4A',desc:'600 militares, 3 forças-tarefa, 2 plataformas mecânicas de 42m. Fiscaliza estruturas e emite a autorização do evento.',rp:2,r:3,a:11},
+  {key:'PMERJ',name:'Polícia Militar — PMERJ',icon:'🛡️',color:'#1B5FA0',desc:'5.200 PMs (+30%), 143 viaturas, 8 torres. CICC Móvel com reconhecimento facial, drones e Patrulha Maria da Penha.',rp:2,r:5,a:9},
+  {key:'GM',name:'Guarda Municipal / Ord. Pública',icon:'🏛️',color:'#2E6B1A',desc:'930 agentes/dia. Bloqueios viários, BRT Seguro, patrulha aquática na Lagoa de Jacarepaguá com catamarã.',rp:3,r:4,a:10},
+  {key:'CET',name:'CET-RIO / SMTR',icon:'🚦',color:'#639922',desc:'210 operadores/dia, 48 motos, 27 viaturas, 28 bloqueios com OCR, 500 galhardetes e 43 painéis de mensagem.',rp:3,r:4,a:8},
+  {key:'COMLURB',name:'COMLURB',icon:'♻️',color:'#666',desc:'186 garis/dia em 3 turnos, 24h. 124 caixas metálicas de 1.200L, 11 sopradores e Programa Lixo Zero no entorno.',rp:2,r:0,a:5},
+  {key:'ALERTA',name:'Alerta Rio',icon:'🌦️',color:'#185FA5',desc:'Monitoramento climático 24h/7. Boletins diários e acionamento de gatilhos de contingência (Gatilho 1 e Gatilho 2).',rp:1,r:2,a:13},
+  {key:'SAUDE',name:'Secretaria Municipal de Saúde',icon:'🏥',color:'#A32D2D',desc:'IVISA-Rio com 37 agentes/dia. CIEVS presente do portão ao encerramento. 35 hotéis inspecionados. Monitoramento pós-evento.',rp:2,r:1,a:8},
+  {key:'PCERJ',name:'Polícia Civil — PCERJ',icon:'🔎',color:'#534AB7',desc:'1.675 agentes mobilizados, 714 exclusivos para o evento. 45 viaturas/dia. Central de flagrantes nas 16ª e 42ª DPs.',rp:2,r:2,a:3},
+  {key:'SMAS',name:'SMAS / PROCON',icon:'🤝',color:'#D4920A',desc:'22 agentes do Procon Carioca no local. Fiscalização de ambulantes, monitoramento de preços e assistência social.',rp:2,r:1,a:4},
+];
+
+// Render Matrix
+function renderMatrix(filter){
+  const tbody=document.getElementById('matriz-body');
+  tbody.innerHTML='';
+  let lastPhase='';
+  const phaseColors={'Planejamento':'#f9f0f0','Mobilização':'#fef8ee','Show / Operação':'#eef3fc'};
+  const phaseTextColors={'Planejamento':'#8B1A1A','Mobilização':'#7a4d00','Show / Operação':'#0c447c'};
+  MATRIX.forEach(row=>{
+    if(filter!=='all'&&!row.code.startsWith(filter))return;
+    if(row.phase!==lastPhase){
+      const tr=document.createElement('tr');
+      tr.className='phase-header';
+      tr.innerHTML=`<td colspan="19" style="background:${phaseColors[row.phase]};color:${phaseTextColors[row.phase]}">${row.phase}</td>`;
+      tbody.appendChild(tr);
+      lastPhase=row.phase;
+    }
+    const tr=document.createElement('tr');
+    tr.className='act-row';
+    const hasDetail=!!DETAILS[row.code];
+    let nameHtml=hasDetail
+      ?`<span class="act-name" onclick="openDetail('${row.code}')" title="Clique para ver detalhes">${row.label} <span style="color:var(--red);font-size:10px">›</span></span>`
+      :`<span class="act-name" style="cursor:default">${row.label}</span>`;
+    let cells=`<td class="td-act"><span class="act-code">${row.code}</span>${nameHtml}</td>`;
+    COLS.forEach(c=>{
+      const v=row.data[c];
+      if(v){
+        cells+=`<td><span class="badge badge-${v}" title="${COL_NAMES[c]}: ${v==='RP'?'Responsável Principal':v==='R'?'Responsável':'Apoio'}">${v}</span></td>`;
+      }else{
+        cells+=`<td><span class="badge badge-empty">·</span></td>`;
+      }
+    });
+    tr.innerHTML=cells;
+    tbody.appendChild(tr);
+  });
+}
+
+// Open detail modal
+function openDetail(code){
+  const row=MATRIX.find(r=>r.code===code);
+  const det=DETAILS[code];
+  if(!row||!det)return;
+  document.getElementById('m-code').textContent=code;
+  document.getElementById('m-phase').textContent=row.phase;
+  document.getElementById('m-title').textContent=row.label;
+
+  // Build responsible grid
+  const respItems=COLS.map(c=>{
+    const v=row.data[c];
+    if(!v)return null;
+    const bg=v==='RP'?'var(--RP-bg)':v==='R'?'var(--R-bg)':'var(--A-bg)';
+    const tc=v==='RP'?'var(--RP-text)':v==='R'?'var(--R-text)':'var(--A-text)';
+    const bc=v==='RP'?'var(--RP-border)':v==='R'?'var(--R-border)':'var(--A-border)';
+    return `<div class="modal-resp-item" style="background:${bg};color:${tc};border:1px solid ${bc}"><div style="font-size:13px;font-weight:700">${v}</div><div style="font-size:10px;margin-top:2px;opacity:.8">${COL_NAMES[c]}</div></div>`;
+  }).filter(Boolean).join('');
+
+  // Build highlights
+  const highlightHtml=det.highlights.map(h=>`<div class="modal-highlight"><strong>${h.label}:</strong> ${h.val}</div>`).join('');
+
+  // Build links
+  const linksHtml=det.links.length
+    ?`<div class="modal-section"><div class="modal-section-title">Fontes e referências</div><div class="modal-links">${det.links.map(l=>`<a class="modal-link" href="${l}" target="_blank">🔗 ${l}</a>`).join('')}</div></div>`
+    :'';
+
+  document.getElementById('m-body').innerHTML=`
+    <div class="modal-rp">
+      <div>
+        <div class="modal-rp-label">Responsável Principal (RP)</div>
+        <div class="modal-rp-org">${det.rp}</div>
+      </div>
+    </div>
+    ${highlightHtml?`<div class="modal-section"><div class="modal-section-title">Dados operacionais</div>${highlightHtml}</div>`:''}
+    <div class="modal-section"><div class="modal-section-title">Descrição e contexto</div><div class="modal-text"><p>${det.text}</p></div></div>
+    <div class="modal-section"><div class="modal-section-title">Participação dos órgãos</div><div class="modal-resp-grid">${respItems}</div></div>
+    ${linksHtml}
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e){
+  if(e.target===document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// Keyboard close
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('modal-overlay').classList.remove('open')});
+
+// Render Orgs
+function renderOrgs(){
+  const g=document.getElementById('orgs-grid');
+  g.innerHTML=ORGS.map(o=>`
+    <div class="org-card">
+      <div class="org-icon">${o.icon}</div>
+      <div class="org-name">${o.name}</div>
+      <div class="org-desc">${o.desc}</div>
+      <div class="org-stats">
+        ${o.rp?`<span class="stat-pill stat-RP">RP: ${o.rp}</span>`:''}
+        ${o.r?`<span class="stat-pill stat-R">R: ${o.r}</span>`:''}
+        <span class="stat-pill stat-A">A: ${o.a}</span>
+      </div>
+    </div>`).join('');
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+function filterPhase(f,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderMatrix(f);
+}
+
+renderMatrix('all');
+renderOrgs();
+</script>
+</body>
+</html>
